@@ -1,0 +1,54 @@
+version: '3.8'
+
+services: 
+  mysqldb:
+    image: mysql
+    restart: always
+    platform: linux/x86_64
+    env_file: .env
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_ROOT_USER: $MYSQL_ROOT_USER
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+    ports: 
+      - 3307:3306
+    expose:
+      - 3307
+    volumes:
+      - ./config/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - full-stack-test
+
+  app:
+    ports:
+      - 3000:3000
+    image: full_stack_test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysqldb
+    volumes:
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
+    networks:
+      - full-stack-test
+    environment:
+      DB_HOST: mysqldb
+      DB_PORT: 3307
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_ROOT_USER: $MYSQL_ROOT_USER
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+
+volumes:
+  mysql: ~
+networks:
+  full-stack-test:
+    driver: bridge
