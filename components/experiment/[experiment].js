@@ -176,11 +176,11 @@ function Experiment (){
             <div className="card-header">
                 FULL STACK TEST
             </div>
-           <div className="card-body">
+           <div className="card-body m-2 p-2">
              <h5 className="card-title">THANK YOU FOR YOR VALUABLE RESPONSE</h5>
              <p className="card-text">Please press the button below to go to next experiment.</p>
              <Link href="/">
-                <button className="btn btn-primary">Explore Experiments</button>
+                <button className="btn btn-primary m-2">Explore Experiments</button>
             </Link>
            </div>
          </div>

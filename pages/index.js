@@ -62,7 +62,7 @@ export default function Home({experiments}) {
           <h1>
             EXPERIMENTATION
           </h1>
-          {dataList ? 
+          {dataList && dataList.length > 0 ? 
           <table className="table">
             <thead>
               <tr>
@@ -94,12 +94,14 @@ export default function Home({experiments}) {
 
             </tbody>
           </table> :
-          <div className="container">
-            Currently there are no experiment running. Click the button below to add experiment.
+          <div className="card text-center">
+            <div className='card-body'>
+              Currently there are no experiment running. Click the button below to add experiment.
+            </div>
           </div>
           }
 
-        <div className="container">
+        <div className="container mt-2 p-4">
         <Link href="/add-experiment">
            <button className="btn btn-success">Add Experiment</button>
         </Link>
