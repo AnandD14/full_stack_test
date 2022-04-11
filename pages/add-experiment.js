@@ -10,7 +10,7 @@ function AddExperiment() {
   const form = createRef();
 
  
-
+  //necessary state values for page interactivity.
   const [showSave, setShowSave] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
@@ -26,7 +26,7 @@ function AddExperiment() {
   const [alertMessage, setAlertMessage] = useState(null);
   
 
-  
+  //to maintain persistence on the page which is called when the page loads for the first time for knowing the cuurent experience if user realoads the page.
   useEffect( () =>{
     const data  = window.localStorage.getItem('EXPERIMENT');
     if(data !== null ){
@@ -35,7 +35,7 @@ function AddExperiment() {
     }
   },[])
 
- 
+ //handle change when a choice is made.
   const handleChange= (e) => {
     console.log(e.target.value);
     if(e.target.value === "Single-line text"){ 
@@ -55,6 +55,7 @@ function AddExperiment() {
     }
   }
 
+  //add option for selecting from list of options
   const addOption = (e) => {
 
     if(optionInput.current.value === ""){
@@ -80,6 +81,7 @@ function AddExperiment() {
     }
   }  
 
+  //get option number on enter key presssed.
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       if(e.target.value === "")
@@ -92,12 +94,14 @@ function AddExperiment() {
     }
   }
 
+  //use form hook for validation
   const {register, handleSubmit, formState:{errors}} = useForm();
 
   const submitForm = (e) => {
     saveQuestion();
   }
  
+  
   async function saveQuestion(){
     const id = window.localStorage.getItem('EXPERIMENT_ID');
     console.log(id);

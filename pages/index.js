@@ -17,7 +17,7 @@ export async function getServerSideProps() {
 
 export default function Home({experiments}) {
 
-  const [dataList, setDataList] = useState();
+  const [dataList, setDataList] = useState(null);
   
   //set experiments data as soon as page renders to maintain interactivity on page.
   useEffect( () =>{

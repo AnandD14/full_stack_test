@@ -6,7 +6,7 @@ function TextArea({question, qid}) {
     return (
         <div className="form-group p-3">
             <label htmlFor="question">{question}</label>
-            <textarea className='form-control' name="experiment" rows="3" onChange={event => handleChange(qid, event)}></textarea>                  
+            <textarea className='form-control' name={"answer"+qid} rows="3" onChange={event => handleChange(qid, event)}></textarea>                  
         </div>
     )
 }

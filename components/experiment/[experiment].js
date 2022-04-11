@@ -4,22 +4,19 @@ import { createRef, useEffect, useState,} from 'react';
 import Element from '../element';         
 import Link from 'next/link';
 import { FormContext } from '../FormContext';
-import { useRouter } from 'next/router';
 
 
 
 function Experiment (){
-    const nameInput = createRef();
-    const emailInput = createRef();
-    const phoneInput = createRef();
-    const router = useRouter();
-    const { query } = router;
 
+    const form = createRef();
 
 
     const [formElements, setFormElements] = useState(null);
     const [showForm, setShowForm] = useState(true);
-
+    const [showAlert, setShowAlert] = useState(null);
+    
+    //get experiment question and set it to setFormElements state for dynamic form elements.
     useEffect( () => {
         const path = window.location.pathname.split("/");
         getElements();
@@ -39,11 +36,56 @@ function Experiment (){
     
         }
     },[])
+
     const {register, handleSubmit, formState:{errors}} = useForm();
 
-    const form = createRef();
+    const handleEmailValidation = email => {
+        const isValid =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+            email);
+
+        return isValid;
+      };
+
+    
+   
     const submitForm = (e) => {
-        saveResponse();
+        console.log(handleEmailValidation(form.current.email.value));
+        const validate = true;
+        validate = validateForm();
+        
+        if(validate){
+            saveResponse();
+        }
+        
+    }
+    
+    //form validation when form is submitted.
+    function validateForm() {
+        if(form.current.username.value === "" || form.current.email.value === "" || form.current.phoneNumber.value === ""){
+            setShowAlert("Name, Email and Phone Number is required");
+            return false;
+        }else if(!handleEmailValidation(form.current.email.value)){
+            setShowAlert("Please enter a valid email");
+            return false;
+        }else if(!/^[0-9\b]+$/.test(form.current.phoneNumber.value)){
+            setShowAlert("Please enter a valid phone number");
+            return false;
+        }else {
+           try { formElements.forEach(formElement => {
+                    if(!formElement.answer) 
+                        throw Exception;
+                    else {
+                        if(formElement.answer === "") 
+                            throw Exception;                    
+                    }
+                })
+            }catch(e) {
+                setShowAlert("Please answer all the questions");
+                return false;
+            }
+        }
+
+        return true;
     }
 
     async function saveResponse(){
@@ -65,9 +107,10 @@ function Experiment (){
 
      
     const handleChange = (id, event) => {
+
+        setShowAlert(null);
        
         if(event.target.name === "username" || event.target.name === "email" || event.target.name === "phoneNumber" ){
-            console.log(event.target.name, event.target.value);
             formElements.map(field => {
                 field[event.target.name] = event.target.value;
                 setFormElements(formElements)
@@ -100,12 +143,15 @@ function Experiment (){
             <Header/>
             <FormContext.Provider value={{ handleChange }}>
             {showForm ? <div className='row mt-5'>
-                <div className="col-md-4 card m-auto shadow-lg">
-                    <form onSubmit={handleSubmit(submitForm)}>
+                {showAlert && <div className="alert alert-danger center-block" role="alert">
+                    {showAlert}
+                </div>}
+                <div className="col-md-4 card m-auto shadow{-lg">
+                    <form onSubmit={handleSubmit(event =>submitForm(event))} ref={form}>
                         <div className="card-body">
                             <div className="form-group p-3">
                                 <label htmlFor="name">Name</label>
-                                <input className='form-control' name="username" onChange={event => handleChange(1,event)}></input>                  
+                                <input className='form-control' name="username" onChange={event => handleChange(1,event)} ></input>    
                             </div>
                             <div className="form-group p-3">
                                 <label htmlFor="email">Email</label>
