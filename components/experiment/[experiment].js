@@ -143,7 +143,7 @@ function Experiment (){
             <Header/>
             <FormContext.Provider value={{ handleChange }}>
             {showForm ? <div className='row mt-5'>
-                {showAlert && <div className="alert alert-danger center-block" role="alert">
+                {showAlert && <div className="alert alert-danger text-center" role="alert">
                     {showAlert}
                 </div>}
                 <div className="col-md-4 card m-auto shadow{-lg">

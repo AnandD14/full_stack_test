@@ -86,6 +86,9 @@ function AddExperiment() {
     if (e.key === 'Enter') {
       if(e.target.value === "")
         setAlertMessage("Please enter options in number");
+      else if (!/^[0-9\b]+$/.test(e.target.value)) {
+        setAlertMessage("Option should only be number");
+      }
       else{ 
         setOptionCount(e.target.value);
         setShowInput(!showInput);
@@ -156,9 +159,9 @@ function AddExperiment() {
           <Header/>
           <h1 className='display-3 text-center mt-5'>ADD EXPERIMENT</h1>
           <div className='row mt-5'>
-            {alertMessage && <div className="alert alert-danger" role="alert">
+            {alertMessage && <div className='container-fluid'><div className="alert alert-danger text-center" role="alert">
                  {alertMessage}
-            </div>}
+            </div></div>}
             <div className="col-md-4 card m-auto shadow-lg">
               <form onSubmit={handleSubmit(submitForm)} ref={form}>
                 <div className="card-body">
